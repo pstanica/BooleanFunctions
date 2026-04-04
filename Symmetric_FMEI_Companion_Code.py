@@ -87,9 +87,9 @@ def verify_parseval_and_influence(n_max=10):
     Check that for every S_{D,n} with even n <= n_max:
 
       (i)  sum_k C(n,k) W_f(k)^2 = 1                  (Parseval)
-      (ii) Inf(f) from Walsh = Inf(f) from transitions  (Corollary 5.1)
+      (ii) Inf(f) from Walsh = Inf(f) from transitions  (Corollary 4.4)
 
-    The transition formula (Corollary 5.1) is
+    The transition formula (Corollary 4.4) is
         Inf(S_{D,n}) = (n / 2^{n-1}) * T
     where T = sum_{w=0}^{n-1} C(n-1, w) * [C(w, d-1) mod 2 for some d in D].
     More precisely, the derivative indicator at weight w is
@@ -122,7 +122,7 @@ def verify_parseval_and_influence(n_max=10):
 
 def verify_inf_s2n(n_max=30):
     """
-    Verify Theorem 5.2:  Inf(S_{2,n}) = n/2  for even n <= n_max.
+    Verify Theorem 6.5:  Inf(S_{2,n}) = n/2  for even n <= n_max.
 
     The analytic proof uses the involution w <-> (n-1-w) on odd w in {0,...,n-1}
     to show T = sum_{w odd} C(n-1, w) = 2^{n-2}, giving Inf = n * 2^{n-2} / 2^{n-1} = n/2.
@@ -145,7 +145,7 @@ def verify_inf_s2n(n_max=30):
 
 def verify_mirror_symmetry(n_max=12):
     """
-    Verify Lemma 5.4:  K_w(n-k; n) = (-1)^w * K_w(k; n)  for all w, k, n.
+    Verify Lemma 6.7:  K_w(n-k; n) = (-1)^w * K_w(k; n)  for all w, k, n.
 
     Consequence:  W_{S_{D XOR {1}, n}}(k) = W_{S_{D,n}}(n-k).
     """
@@ -177,7 +177,7 @@ def verify_mirror_symmetry(n_max=12):
 
 def verify_endpoint_domination(d_max=11, n_max=16):
     """
-    Verify Proposition 5.4 (lower bound direction):
+    Verify Proposition 6.9 (lower bound direction):
         M(S_{d,n}) >= max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|)
     for all single-degree d and even n with d <= d_max, n <= n_max.
 
@@ -213,14 +213,14 @@ def density_exact(D, n):
 
 def verify_density_recurrence(n_max=12):
     """
-    Verify Proposition 5.5 for D not containing 1:
+    Verify Proposition 6.11 for D not containing 1:
         W_{S_{D,n+1}}(0) = (1/2)(W_{S_{D,n}}(0) + W_{S_{D_f1,n}}(0))
 
     where D_f1 = symmetric difference of D and {d-1 : d in D, d >= 2}.
-    This is the restriction formula at k=0 from Corollary 4.2, written out
+    This is the restriction formula at k=0 from Corollary 4.4, written out
     explicitly using W(0) = 1 - 2p.
 
-    Note: D containing 1 is handled by applying mirror symmetry first (Lemma 5.4),
+    Note: D containing 1 is handled by applying mirror symmetry first (Lemma 6.7),
     which maps S_{D,n} to S_{D XOR {1},n}, and 1 is removed from D XOR {1}.
     """
     for n in range(2, n_max):
@@ -250,7 +250,7 @@ def verify_density_recurrence(n_max=12):
 
 def verify_poincare_bound():
     """
-    Verify the analytic inequality used in Proposition 6.1:
+    Verify the analytic inequality used in Proposition 7.1:
         1 - t  >=  4^{-t} = 2^{-2t}   for all t in [0, 1/2].
 
     In the paper:  if Inf(f) <= 1/2, then W_f(0)^2 >= 1 - Inf(f) >= 4^{-Inf(f)},
@@ -272,7 +272,7 @@ def verify_poincare_bound():
 
 def verify_and_function(n_max=20):
     """
-    Verify Lemma 7.1:  Hmin(S_{n,n}) <= 2 Inf(S_{n,n})  for even n <= n_max.
+    Verify Lemma 8.1:  Hmin(S_{n,n}) <= 2 Inf(S_{n,n})  for even n <= n_max.
 
     Equivalently (using W_{S_{n,n}}(0) = 1 - 2^{1-n} and Inf = n/2^{n-1}):
         1 - 2^{1-n}  >=  2^{-n/2^{n-1}}
@@ -289,18 +289,19 @@ def verify_and_function(n_max=20):
 
 
 # ===========================================================================
-# 8. LEMMA 7.2  —  Asymptotic bias (single-degree finite verification)
+# 8. LEMMA 8.2  —  Asymptotic bias (single-degree finite verification)
 # ===========================================================================
 
 def verify_single_degree_finite(d_max=20, n_max=50):
     """
-    Verify Proposition 7.3 (finite range part of Theorem 7.4):
+    Verify Proposition 8.3 (finite range part of Theorem 8.4):
         max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|) >= 2^{-Inf(S_{d,n})}
     for all d in {1,...,d_max} and even n with d <= n <= n_max,
     restricted to the range 1/2 < Inf < n/2.
 
-    This is the finite verification combined with Lemma 7.2 to prove
-    the single-degree conjecture for all d and all n.
+    This is the finite verification combined with Lemma 8.2 to prove
+    the single-degree theorem for all d <= 20, and asymptotically for each
+    fixed d >= 21.
     """
     for d in range(1, d_max + 1):
         for n in range(max(d, 2), n_max + 1, 2):
@@ -322,7 +323,7 @@ def verify_single_degree_finite(d_max=20, n_max=50):
 
 def verify_conjecture_all_n12(n_max=12):
     """
-    Proposition SD-comp: verify  Hmin(S_{D,n}) <= 2 Inf(S_{D,n})
+    Proposition 6.15: verify  Hmin(S_{D,n}) <= 2 Inf(S_{D,n})
     for every nonempty D and every even n <= n_max.
 
     Returns (total_instances, equality_cases) where equality_cases lists
@@ -370,7 +371,7 @@ def _get_barrier_data(sigma_f, n):
 
 def verify_barrier_key_inequality(n_max=14):
     """
-    Verify the key inequality of Theorem 8.1 Case (iii):
+    Verify the key inequality used in the multi-degree barrier discussion leading to Theorem 9.1:
         max(M(f_0), M(f_1)) >= 2 * 2^{-Inf(S_{D,n})}
     for every S_{D,n} with |D| >= 2, even n <= n_max, in the barrier regime:
       · 1/2 < Inf < n/2
@@ -408,7 +409,7 @@ def verify_barrier_key_inequality(n_max=14):
             L0 = {k for k in range(n_r + 1) if abs(abs(W0k[k]) - M0) < 1e-9}
             L1 = {k for k in range(n_r + 1) if abs(abs(W1k[k]) - M1) < 1e-9}
             if L0 & L1:
-                continue    # common layer — handled by Theorem 5.3 (commonlayer)
+                continue    # common layer — handled by Theorem 5.1 (commonlayer)
 
             I0 = sum(k * comb(n_r, k) * W0k[k]**2 for k in range(n_r + 1))
             I1 = sum(k * comb(n_r, k) * W1k[k]**2 for k in range(n_r + 1))
@@ -416,7 +417,7 @@ def verify_barrier_key_inequality(n_max=14):
                          for w in range(n_r + 1)) / 2**n_r)
             cond = abs(I0 - I1) + 2 * delta
             if cond >= 2:
-                continue    # disjoint-layer criterion — handled by Theorem 5.4
+                continue    # disjoint-layer criterion — handled by Theorem 5.2
 
             # Barrier case: verify the key inequality
             total_barrier += 1
@@ -438,7 +439,7 @@ def compute_table_ratios(d_range=range(3, 21), n_max=50):
         min_{even n : d<=n<=n_max, 1/2 < Inf < n/2}
             max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|) / 2^{-Inf(S_{d,n})}
 
-    All values exceed 1, confirming Proposition 7.3 over the finite range.
+    All values exceed 1, confirming Proposition 8.3 over the finite range.
     Only even n are considered, matching the paper's even-dimensional conjecture.
     """
     table = {}
@@ -461,14 +462,14 @@ def compute_table_ratios(d_range=range(3, 21), n_max=50):
 
 
 # ===========================================================================
-# 12. INFLUENCE ASYMPTOTICS  —  Proposition 5.7
+# 12. INFLUENCE ASYMPTOTICS  —  Proposition 6.19
 # ===========================================================================
 
 def compute_influence_asymptotics(a_max=3, n_max=40):
     """
     Compute Inf(S_{2^a, n}) / (n / 2^a) for even n, verifying convergence to 1.
 
-    Proposition 5.7 states  Inf(S_{2^a,n}) = n/2^a * (1 + O(2^{-n/2})).
+    Proposition 6.19 states  Inf(S_{2^a,n}) = n/2^a * (1 + O(2^{-n/2})).
     """
     results = {}
     for a in range(1, a_max + 1):
@@ -548,34 +549,34 @@ def run_all(verbose=True):
     run("Parseval + influence formula  (Prop 3.1, n ≤ 10)",
         verify_parseval_and_influence, n_max=10)
 
-    print("\nSection 5 — Elementary symmetric functions")
-    run("Inf(S_{2,n}) = n/2 for even n ≤ 30  (Thm 5.2)",
+    print("\nSection 6 — Elementary symmetric functions")
+    run("Inf(S_{2,n}) = n/2 for even n ≤ 30  (Thm 6.5)",
         verify_inf_s2n, n_max=30)
-    run("Mirror symmetry  K_w(n-k;n) = (−1)^w K_w(k;n)  (Lem 5.4)",
+    run("Mirror symmetry  K_w(n-k;n) = (−1)^w K_w(k;n)  (Lem 6.7)",
         verify_mirror_symmetry, n_max=12)
-    run("Endpoint lower bound  M >= max(|W(0)|,|W(n)|)  (Prop 5.4, d ≤ 11, n ≤ 16)",
+    run("Endpoint lower bound  M >= max(|W(0)|,|W(n)|)  (Prop 6.9, d ≤ 11, n ≤ 16)",
         verify_endpoint_domination, d_max=11, n_max=16)
-    run("Density recurrence  (Prop 5.5, n ≤ 12, D not containing 1)",
+    run("Density recurrence  (Prop 6.11, n ≤ 12, D not containing 1)",
         verify_density_recurrence, n_max=12)
 
-    print("\nSection 6 — Poincaré / small-influence")
-    run("Poincaré:  1−t ≥ 4^{−t}  for t ∈ [0, 1/2]  (Prop 6.1)",
+    print("\nSection 7 — Poincaré / small-influence")
+    run("Poincaré:  1−t ≥ 4^{−t}  for t ∈ [0, 1/2]  (Prop 7.1)",
         verify_poincare_bound)
 
-    print("\nSection 7 — Single-degree conjecture")
-    run("AND function:  (1−2^{1−n}) ≥ 2^{−n/2^{n−1}}  (Lem 7.1, n ≤ 20)",
+    print("\nSection 8 — Single-degree results")
+    run("AND function:  (1−2^{1−n}) ≥ 2^{−n/2^{n−1}}  (Lem 8.1, n ≤ 20)",
         verify_and_function, n_max=20)
-    run("Finite verification  max(|W(0)|,|W(n)|) ≥ 2^{−Inf}  (Prop 7.3, d ≤ 20, n ≤ 50)",
+    run("Finite verification  max(|W(0)|,|W(n)|) ≥ 2^{−Inf}  (Prop 8.3, d ≤ 20, n ≤ 50)",
         verify_single_degree_finite, d_max=20, n_max=50)
 
-    print("\nSection 5 — Full computational verification  (Prop SD-comp)")
+    print("\nSection 6 — Full computational verification  (Prop 6.15)")
     total, eq = verify_conjecture_all_n12(n_max=12)
     if verbose:
         print(f"  PASS  Conjecture holds for all {total:,} instances with n ≤ 12")
         eq_str = ", ".join(f"(n={n}, D={set(D)})" for n, D in eq[:4])
         print(f"        Equality (bent) cases: {eq_str} ...")
 
-    print("\nSection 8 — Multi-degree barrier  (Thm 8.1 Case iii)")
+    print("\nSection 9 — Multi-degree barrier / reduction")
     barrier_count = verify_barrier_key_inequality(n_max=14)
     if verbose:
         print(f"  PASS  max(M₀,M₁) ≥ 2·2^{{−I}}  for all {barrier_count:,} "
