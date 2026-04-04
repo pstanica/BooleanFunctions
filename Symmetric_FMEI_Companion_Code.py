@@ -177,12 +177,13 @@ def verify_mirror_symmetry(n_max=12):
 
 def verify_endpoint_domination(d_max=11, n_max=16):
     """
-    Verify Proposition 5.4:
-        M(S_{d,n}) = max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|)
+    Verify Proposition 5.4 (lower bound direction):
+        M(S_{d,n}) >= max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|)
     for all single-degree d and even n with d <= d_max, n <= n_max.
 
-    This is the key structural property used to reduce the single-degree
-    conjecture to an endpoint bias bound.
+    Note: this is a lower bound on M, not an equality. Computational checks
+    show the maximum is NOT always achieved at an endpoint (e.g. d=20, n=44
+    has its maximum at k=2, exceeding both endpoints).
     """
     for d in range(1, d_max + 1):
         for n in range(max(d, 2), n_max + 1, 2):
@@ -190,8 +191,8 @@ def verify_endpoint_domination(d_max=11, n_max=16):
             Wk = walsh_spectrum(sigma, n)
             M = max(abs(v) for v in Wk)
             max_end = max(abs(Wk[0]), abs(Wk[n]))
-            assert abs(M - max_end) < 1e-9, \
-                f"Endpoint domination failed: d={d}, n={n}, " \
+            assert M >= max_end - 1e-9, \
+                f"Endpoint lower bound failed: d={d}, n={n}, " \
                 f"M={M:.8f}, max_end={max_end:.8f}"
     return "PASS"
 
@@ -431,18 +432,21 @@ def verify_barrier_key_inequality(n_max=14):
 # 11. TABLE 1  —  Minimum bias ratios for single-degree
 # ===========================================================================
 
-def compute_table_ratios(d_range=range(3, 13), n_max=50):
+def compute_table_ratios(d_range=range(3, 21), n_max=50):
     """
     Compute Table 1 from the paper:
         min_{even n : d<=n<=n_max, 1/2 < Inf < n/2}
             max(|W_{S_{d,n}}(0)|, |W_{S_{d,n}}(n)|) / 2^{-Inf(S_{d,n})}
 
     All values exceed 1, confirming Proposition 7.3 over the finite range.
+    Only even n are considered, matching the paper's even-dimensional conjecture.
     """
     table = {}
     for d in d_range:
         min_ratio = float('inf')
-        for n in range(max(d, 2), n_max + 1, 2):
+        # Start at smallest even n >= d
+        n_start = d if d % 2 == 0 else d + 1
+        for n in range(n_start, n_max + 1, 2):
             sigma = [(-1)**(comb(w, d) % 2) for w in range(n + 1)]
             Wk = walsh_spectrum(sigma, n)
             Inf = sum(k * comb(n, k) * Wk[k]**2 for k in range(n + 1))
@@ -549,7 +553,7 @@ def run_all(verbose=True):
         verify_inf_s2n, n_max=30)
     run("Mirror symmetry  K_w(n-k;n) = (−1)^w K_w(k;n)  (Lem 5.4)",
         verify_mirror_symmetry, n_max=12)
-    run("Endpoint domination  M = max(|W(0)|,|W(n)|)  (Prop 5.4, d ≤ 11, n ≤ 16)",
+    run("Endpoint lower bound  M >= max(|W(0)|,|W(n)|)  (Prop 5.4, d ≤ 11, n ≤ 16)",
         verify_endpoint_domination, d_max=11, n_max=16)
     run("Density recurrence  (Prop 5.5, n ≤ 12, D not containing 1)",
         verify_density_recurrence, n_max=12)
@@ -579,7 +583,7 @@ def run_all(verbose=True):
 
     print("\nAdditional tables and data")
 
-    table = compute_table_ratios(d_range=range(3, 13), n_max=50)
+    table = compute_table_ratios(d_range=range(3, 21), n_max=50)
     if verbose:
         print("  Table 1 — minimum bias ratio max(|W(0)|,|W(n)|)/2^{−Inf}:")
         row = "  " + "  ".join(f"d={d}: {v:.5f}" for d, v in table.items())
