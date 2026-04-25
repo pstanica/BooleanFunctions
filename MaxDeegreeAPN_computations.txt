@@ -1,0 +1,299 @@
+=========================================================================
+README: Computational Verification Code for
+  "On the Maximum Algebraic Degree of APN Functions
+   via Partial APN Functions and Shifted Derivative Images"
+  P. Stanica, Naval Postgraduate School
+
+File: apn_computations.py
+=========================================================================
+
+OVERVIEW
+--------
+This script verifies all computational claims in the paper using only
+the Python 3 standard library.  No numpy, sage, or third-party packages
+are required.
+
+All section headings in the code and in this README use descriptive
+mathematical names rather than theorem/proposition numbers.  If the
+paper is renumbered, the code and README remain correct without any
+changes.
+
+The paper studies the conjecture (Budaghyan-Carlet-Helleseth-Li-Sun,
+2018) that no APN function over F_{2^n} has algebraic degree n for
+n >= 3, and reformulates it as: the projective line-labeling
+
+    lambda_F({a, b, a+b}) = F(a) + F(b) + F(a+b)
+
+must be surjective onto F_{2^n}* for every APN F with F(0)=0.
+The script verifies the structural and computational results supporting
+this reformulation.
+
+
+USAGE
+-----
+Fast verifications (a few seconds):
+
+    python3 apn_computations.py
+
+Slow verifications (includes exhaustive GF(8) check ~30-60 seconds and
+monomial surjectivity checks for n=4,5,6,7):
+
+    python3 apn_computations.py --slow
+
+Python version: 3.7 or later.  No external packages needed.
+
+
+WHAT THE SCRIPT VERIFIES
+-------------------------
+
+---
+
+SECTION 1: 0-APN COUNTEREXAMPLE
+(properness alone does not force surjectivity)
+-----------------------------------------------
+Mathematical claim:
+  There exists F: GF(16) -> GF(16) with F(0)=0 that is 0-APN
+  (no projective line receives label 0) but not APN (some derivative
+  D_aF is not 2-to-1), and whose line-labeling lambda_F is not
+  surjective.
+
+Why this matters:
+  A proper nonzero line-labeling (= 0-APN-ness) is not sufficient for
+  surjectivity.  The full APN condition -- every D_aF is 2-to-1, i.e.,
+  every two intersecting lines receive distinct labels -- is genuinely
+  needed.  This shows the surjectivity conjecture captures exactly the
+  right strength of the APN hypothesis.
+
+Explicit counterexample verified:
+  F = [0, 5, 7, 5, 14, 12, 8, 7, 10, 1, 7, 1, 10, 12, 8, 2]
+  over GF(16) = GF(2)[alpha]/(alpha^4 + alpha + 1),
+  elements encoded as integers 0..15 via binary representation.
+
+Output:
+  F is 0-APN:  True
+  F is APN:    False
+  Missing labels: [2, 4, 6, 8]
+
+---
+
+SECTION 2: EXHAUSTIVE SURJECTIVITY CHECK OVER GF(8)   [--slow]
+----------------------------------------------------------------
+Mathematical claim:
+  Every APN function F: GF(8) -> GF(8) with F(0)=0 gives a surjective
+  line-labeling lambda_F.
+
+Background:
+  For n=3, PG(2,2) is a single Fano plane with 7 lines.  APN properness
+  forces all 7 labels to be pairwise distinct and nonzero (intersecting
+  lines have different labels, no line has label 0), so all 7 nonzero
+  field elements appear automatically.  The exhaustive check confirms
+  this for every APN function.
+
+Method:
+  All 8^7 = 2,097,152 functions with F(0)=0 are enumerated.
+  Each is tested for the APN property, then for surjectivity.
+
+Expected output:
+  Total functions with F(0)=0: 2,097,152  (= 8^7)
+  APN functions:               86,016
+  Surjective line-labeling:    86,016
+  Non-surjective:              0
+
+Timing: approximately 30-60 seconds.
+
+---
+
+SECTION 3: APN MONOMIAL SURJECTIVITY CHECK   [--slow]
+(n = 4, 5, 6, 7)
+------------------------------------------------------
+Mathematical claim:
+  For n = 4, 5, 6, 7, every APN monomial F(x) = x^d over GF(2^n)
+  gives a surjective line-labeling lambda_F.
+
+Method:
+  All exponents d in [2, 2^n-2] are tested for the APN property.
+  Canonical representatives are reported (d and 2^n-1-d give the
+  same function up to the substitution x -> x^{-1}, which is
+  CCZ-equivalent and preserves APN-ness).
+  For each APN monomial, the line labels are computed and compared
+  to F_{2^n}*.
+
+  The GF(2^n) irreducible polynomials used are:
+    n=4: x^4 + x + 1       (integer form: 19)
+    n=5: x^5 + x^2 + 1     (integer form: 37)
+    n=6: x^6 + x + 1       (integer form: 67)
+    n=7: x^7 + x + 1       (integer form: 131)
+
+Expected output (APN monomial counts):
+    n=4: 4 monomials (canonical exponents [3, 6])
+    n=5: 25 monomials
+    n=6: 6 monomials (canonical [3, 6, 12, 15, 24, 30])
+    n=7: 77 monomials
+  All surjective.
+
+---
+
+SECTION 4: S_3-ORBIT DIVISIBILITY  6 | N_b(F)  for every b != 0
+-----------------------------------------------------------------
+Mathematical claim:
+  For every APN function F with F(0)=0 and every nonzero b,
+  the count N_b(F) = |{(x,y) : F(x)+F(y)+F(x+y) = b}| is
+  divisible by 6.
+
+Why:
+  N_b(F) = 6 * L_b(F) where L_b(F) is the number of projective
+  lines with label b.  Each unordered line contributes exactly 6
+  ordered pairs (x,y): the group S_3 = GL(2,2) of order 6 acts
+  freely on nonzero second-order fibers, permuting {x, y, x+y}.
+
+  This corrects the tempting but false mod-4 argument.  The
+  symmetry group has order 6, not 4.  The total nonzero mass
+  (2^n-1)(2^n-2) is also divisible by 6, so no congruence
+  contradiction arises from N_1(F) = 0.
+
+Dimensions tested: n = 3, 4, 5, 6, 7  (using Gold F(x) = x^3).
+
+---
+
+SECTION 5: OVERSIZED-FIBER OBSTRUCTION AND THRESHOLD U_n
+---------------------------------------------------------
+Mathematical claim (the obstruction):
+  If N_1(F) = 0, then some nonzero b != 1 satisfies N_b(F) >= U_n,
+  where U_n = 6 * ceil(2^n / 6).
+    U_n = 2^n + 2  for even n  (since 2^n ≡ 4 mod 6)
+    U_n = 2^n + 4  for odd  n  (since 2^n ≡ 2 mod 6)
+
+  Contrapositive (the usable direction):
+  If all N_b(F) < U_n, then N_1(F) > 0, so F+x^{2^n-1} is not APN.
+
+Proof sketch:
+  If N_1(F)=0 then sum_{b != 0,1} N_b(F) = (2^n-1)(2^n-2),
+  distributed over 2^n-2 terms with average 2^n-1.  Since each
+  term is a positive multiple of 6, none can equal the odd value
+  2^n-1, so some term exceeds 2^n-1.  The next multiple of 6
+  above 2^n-1 is U_n.
+
+The script also prints the threshold table for n = 3,...,8 and the
+N_b distribution for Gold F(x)=x^3 at n=3,4,5,6.
+
+IMPORTANT LOGICAL POINT:
+  When max N_b >= U_n (which happens for Gold x^3 at n=4 and n=6),
+  the oversized-fiber contrapositive does NOT apply.  The script
+  prints an explicit warning in those cases, and confirms N_1(F) > 0
+  separately by direct pair count.  Do not confuse:
+    - "all N_b < U_n => N_1 > 0"   (the useful contrapositive)
+    - "some N_b >= U_n => N_1 = 0" (FALSE; this direction does not hold)
+
+NOTE: The "Extremal Sigma_1" column in the paper's threshold table
+contains a typographical error.  The correct values (as computed by
+this script) are:
+    n=3:   704    n=4:   5888    n=5:   48128
+    n=6: 389120   n=7: 3129344  n=8: 25100288
+The correct formula is 2^{2n} * (3 * 2^{n-1} - 1).
+
+---
+
+SECTION 6: WALSH TRACE-SLICE IDENTITY
+--------------------------------------
+Mathematical claim:
+  For APN F with F(0)=0, defining
+    Sigma_1(F) = sum_{a in GF(2^n), b in GF(2^n)*, Tr(b)=1} W_F(a,b)^3
+  where W_F(a,b) = sum_x (-1)^{Tr(b*F(x) + a*x)} is the Walsh transform,
+  one has the exact identity:
+    N_1(F) = 3*2^n - 2 - 2^{1-2n} * Sigma_1(F).
+  In particular, N_1(F) = 0 iff Sigma_1(F) = 2^{2n}*(3*2^{n-1} - 1).
+
+Method:
+  For n = 3, 4, 5 using Gold F(x) = x^3, the Walsh transform is
+  computed by direct summation.  Sigma_1 is accumulated, and the
+  formula is compared to a direct count of N_1.
+
+Timing: O(8^n) per dimension; only run for n <= 5.
+
+---
+
+SECTION 7: FANO SUM IDENTITY
+------------------------------
+Mathematical claim:
+  For ANY F with F(0)=0 (not necessarily APN) and any three linearly
+  independent elements u, v, w in GF(2^n), the sum of the labels on
+  all 7 lines of the Fano plane PG(<u,v,w>) equals the third-order
+  derivative:
+
+    sum_{l in PG(<u,v,w>)} lambda_F(l)  =  D_u D_v D_w F(0)
+
+  where D_u D_v D_w F(0) = F(u+v+w) + F(u+v) + F(u+w) + F(v+w)
+                            + F(u) + F(v) + F(w).
+
+Proof:
+  Each of the 7 nonzero points of the Fano plane lies on exactly 3
+  of the 7 lines.  Summing over all lines:
+    sum labels = sum_p (# lines through p) * F(p)
+               = 3 * sum_p F(p) = sum_p F(p)   (in characteristic 2)
+  and sum_p F(p) over the 7 Fano points is D_u D_v D_w F(0) by definition.
+
+Method: 200 random (F, u, v, w) trials per dimension for n = 3, 4, 5, 6.
+
+---
+
+SECTION 8: QUADRATIC FANO CONSTRAINT  B = C + D
+-------------------------------------------------
+Mathematical claim:
+  For quadratic APN F (algebraic degree 2), every third-order
+  derivative D_u D_v D_w F(0) vanishes.  Therefore the Fano sum
+  identity gives sum of 7 labels = 0.
+
+  Writing the four independent Fano labels as A, B, C, D
+  (as in the Fano-plane normal form of the paper), the seven labels are
+    A, B, C, D, A+B+C, A+B+D, A+C+D.
+  Their sum in characteristic 2 is B + C + D (since A appears 4 times,
+  B, C, D each appear 3 times).  Setting this to 0 gives B = C + D.
+
+Illustrated with: Gold F(x) = x^3, which has algebraic degree 2
+over GF(2^n) for all n >= 2.
+Dimensions tested: n = 3, 4, 5, 6.
+
+
+IMPLEMENTATION DETAILS
+-----------------------
+
+GF(2^n) arithmetic:
+  Elements are integers 0..2^n-1.  Addition is XOR.  Multiplication
+  uses the shift-and-XOR algorithm with a fixed irreducible polynomial
+  per n.
+
+Projective line enumeration:
+  A line of PG(n-1,2) is an unordered triple {a, b, c} of nonzero
+  elements with a XOR b XOR c = 0.  The canonical form a < b < c
+  (equivalently: iterate over a < b, accept only when c = a XOR b > b)
+  counts each line exactly once.
+
+  WARNING: iterating over pairs (a, b) with only a < b and c = a XOR b
+  counts each line THREE times (once per choice of which two of the
+  three points form the pair).  The condition c > b is essential.
+
+APN testing: O(4^n) per function.
+0-APN testing: O(4^n) per function.
+Walsh transform: O(8^n) total for Sigma_1; only run for n <= 5.
+
+
+EXPORTED FUNCTIONS (for use in other scripts)
+----------------------------------------------
+  gf_mul(a, b, poly, n)         multiply in GF(2^n)
+  gf_pow(a, e, poly, n)         a^e in GF(2^n)
+  is_apn(F, n)                  True iff F is APN
+  is_0apn(F, n)                 True iff F is 0-APN
+  line_label_set(F, n)          (set_of_labels, count_of_zero_labels)
+  line_label_count(F, n)        dict {label: number_of_lines}
+  Nb_direct(F, n, b)            N_b(F) by direct pair enumeration
+  find_apn_monomials(n, poly)   list of APN exponents d
+
+
+CONTACT
+-------
+Pantelimon Stanica
+Department of Applied Mathematics
+Naval Postgraduate School
+Monterey, CA 93943
+pstanica@nps.edu
+=========================================================================
