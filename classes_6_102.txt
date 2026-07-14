@@ -1,0 +1,89 @@
+scanned moduli=25
+total exact cases=7857606
+failures=0
+distinct non-bipartite graph-isomorphism classes=4
+
+CLASS 1
+  modulus n              : 10
+  generator 1            : (0, 2, 4)
+  generator 2            : (0, 2, 6)
+  bipartite               : False
+  vertices                : (2, 4, 6, 8)
+  edges                   : ((2, 4), (2, 6), (2, 8), (4, 6), (4, 8), (6, 8))
+  degree multiset         : (3, 3, 3, 3)
+  canonical label         : 4:0-1,0-2,0-3,1-2,1-3,2-3
+  kernel dimension        : 0
+  kernel basis supports   : ()
+  q nonzero on radical    : False
+  witness                 : None
+  endpoint equalities    :
+    - -a = a-b = -c = 8 mod 10
+    - -b = d = c-d = 6 mod 10
+    - a = b-a = c = 2 mod 10
+    - b = d-c = -d = 4 mod 10
+
+CLASS 2
+  modulus n              : 6
+  generator 1            : (0, 1, 2)
+  generator 2            : (0, 1, 3)
+  bipartite               : False
+  vertices                : (1, 2, 3, 4, 5)
+  edges                   : ((1, 2), (1, 3), (1, 5), (2, 5), (3, 4), (4, 5))
+  degree multiset         : (2, 2, 2, 3, 3)
+  canonical label         : 5:0-1,0-3,1-4,2-3,2-4,3-4
+  kernel dimension        : 1
+  kernel basis supports   : ((1, 3, 4, 5),)
+  q nonzero on radical    : False
+  witness                 : None
+  endpoint equalities    :
+    - -a = a-b = -c = 5 mod 6
+    - -b = c-d = 4 mod 6
+    - -d = h=3 mod 6
+    - a = b-a = c = 1 mod 6
+    - b = d-c = 2 mod 6
+    - d = -d = 3 mod 6
+    - d = h=3 mod 6
+
+CLASS 3
+  modulus n              : 6
+  generator 1            : (0, 1, 3)
+  generator 2            : (0, 1, 4)
+  bipartite               : False
+  vertices                : (1, 2, 3, 4, 5)
+  edges                   : ((1, 3), (1, 4), (2, 3), (2, 5), (3, 4), (3, 5))
+  degree multiset         : (2, 2, 2, 2, 4)
+  canonical label         : 5:0-1,0-4,1-4,2-3,2-4,3-4
+  kernel dimension        : 1
+  kernel basis supports   : ((1, 2, 3, 4, 5),)
+  q nonzero on radical    : False
+  witness                 : None
+  endpoint equalities    :
+    - -a = -c = 5 mod 6
+    - -b = h=3 mod 6
+    - a = c = 1 mod 6
+    - a-b = d = 4 mod 6
+    - b = -b = d-c = c-d = 3 mod 6
+    - b = h=3 mod 6
+    - b-a = -d = 2 mod 6
+    - c-d = h=3 mod 6
+    - d-c = h=3 mod 6
+
+CLASS 4
+  modulus n              : 10
+  generator 1            : (0, 1, 2)
+  generator 2            : (0, 1, 3)
+  bipartite               : False
+  vertices                : (1, 2, 3, 7, 8, 9)
+  edges                   : ((1, 2), (1, 3), (1, 9), (2, 9), (7, 8), (8, 9))
+  degree multiset         : (1, 1, 2, 2, 3, 3)
+  canonical label         : 6:0-2,1-4,2-5,3-4,3-5,4-5
+  kernel dimension        : 0
+  kernel basis supports   : ()
+  q nonzero on radical    : False
+  witness                 : None
+  endpoint equalities    :
+    - -a = a-b = -c = 9 mod 10
+    - -b = c-d = 8 mod 10
+    - a = b-a = c = 1 mod 10
+    - b = d-c = 2 mod 10
+

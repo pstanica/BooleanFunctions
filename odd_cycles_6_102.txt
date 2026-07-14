@@ -1,0 +1,11 @@
+scanned moduli=25
+total unordered generator pairs=7842650
+total non-bipartite cases=1592
+total triangles=1932
+total induced 5-cycles=0
+bad cases=0
+triangle color-pattern counts:
+  RRB: 1932
+
+PASS: no induced 5-cycle, no triangle-free non-bipartite case, and no non-bipartite case outside F1 or F3 was found.
+
