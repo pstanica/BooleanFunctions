@@ -1,7 +1,7 @@
 """
 Exact, floating-point-free verification for
-  "On non-splitting Z-bent functions of level one:
-   a correction, an exact criterion, and an infinite family".
+  "Solution to an open question of Dobbertin and Leander 
+  on non-splitting $\Z$-bent functions of level one".
 
 The script verifies the finite certificate used in the proof:
   1. the displayed six-variable seed and its normalized Walsh transform;
@@ -11,7 +11,7 @@ The script verifies the finite certificate used in the proof:
   5. as an independent check, full cylinder rank in dimension 8.
 
 Run:
-    python3 NonSplitting_verify_certificate_clean.py
+    python3 NonSplitting_verify_certificate.py
 
 Requires: numpy, sympy.
 All certification steps use integer arithmetic; no floating-point rank test or
