@@ -6,7 +6,8 @@ Pantelimon Stănică.
 
 The programs verify the six-variable non-splitting example, its bent direct
 products, the disjoint-spectra counterexample, splitting for a complete-spread
-construction, and the exhaustive classifications on two and four variables.
+construction, the exhaustive classifications on two and four variables, and 24 further
+non-splitting examples with sixteen zeros.
 
 ## Quick start
 
@@ -21,7 +22,8 @@ python3 reproduce.py
 The default run checks the seed's exact Walsh transform and determinant,
 the explicit bent split of the four-variable counterexample, all bundled
 arrays, and all 8,953 admissible coefficient vectors of the nine-member
-complete spread in dimension six.
+complete spread in dimension six. It also verifies the 24 sixteen-zero
+examples, their determinant certificates and zero-set geometry.
 
 To also check every possible splitting partner of the seed:
 
@@ -66,19 +68,20 @@ The four-variable distribution by support size is:
 ## Independent Python-only verification
 
 `NonSplitting_verify_certificate.py` provides a second implementation of the
-classification, seed determinant and cylinder-rank checks. It uses NumPy and
-SymPy and does not require a C++ compiler or an optimization solver:
+classification, seed determinant and cylinder-rank checks. It also runs the
+sixteen-zero verifier. It uses NumPy and SymPy and does not require a C++ compiler or an optimization solver:
 
 ```sh
 python3 -m pip install -r requirements-certificate.txt
 python3 NonSplitting_verify_certificate.py
 ```
 
-Its two restricted modes are:
+Its restricted modes are:
 
 ```sh
 python3 NonSplitting_verify_certificate.py --seed-only
 python3 NonSplitting_verify_certificate.py --minimal-only
+python3 NonSplitting_verify_certificate.py --examples-only
 ```
 
 The combined program is optional. The separate seed certificate and C++
@@ -89,6 +92,7 @@ classification program verify the same claims independently.
 | File | Purpose |
 | --- | --- |
 | `reproduce.py` | Run the certificate, counterexample, data comparisons and spread checks. |
+| `verify_C16.py` | Verify all sixteen-zero examples, exact minors, cubic zero-set indicators and affine-flat containment. |
 | `verify_seed.py` | Verify the displayed seed, its Walsh transform, the determinant `2^30`, and a cylinder minor of determinant magnitude `2^192`. |
 | `NonSplitting_verify_certificate.py` | Independent Python-only classification, seed and cylinder-rank verification. |
 | `verify_classification.cpp` | Classify all level-one functions on two and four variables using integer arithmetic. |
@@ -96,7 +100,7 @@ classification program verify the same claims independently.
 | `cex.py` | Check the disjoint-spectra semibent counterexample and its explicit bent decomposition. |
 | `spread.py` | Construct the complete GF(64)/GF(8) spread and verify an explicit splitting for every admissible coefficient vector. |
 | `zbent.py` | Walsh transforms, level-one tests, data loading and optional integer-programming routines. |
-| `data/` | NumPy arrays for the seed and its products. |
+| `data/` | Seed and product arrays, sixteen-zero examples and exact minor certificates. |
 | `verification_results.txt` | Reference output from the reproducibility and classification runs. |
 | `requirements.txt` | Dependency for the Python data and example checks. |
 | `requirements-certificate.txt` | Dependencies for the combined Python-only verification. |
@@ -111,6 +115,27 @@ The data files are:
 | `F8.npy` | 8 | 256 | Product of the seed with one copy of `(-1)^(st)`. |
 | `F10.npy` | 10 | 1,024 | Product of the seed with two copies of `(-1)^(st)`. |
 | `F12.npy` | 12 | 4,096 | Product of the seed with three copies of `(-1)^(st)`. |
+
+## Sixteen-zero examples
+
+`data/nonsplitting_C16_examples.txt` contains 24 six-variable level-one
+functions. Each has sixteen zeros in both domains. The associated
+`data/C16_certificates.json` gives both zero sets, the Fourier string, sixteen
+row indices of a nonsingular Walsh minor, its exact determinant, and the
+zero-set geometry. Run these checks separately with:
+
+```sh
+python3 verify_C16.py
+```
+
+Four primal zero sets are disjoint unions of two affine 3-flats. The other
+twenty contain no affine 3-flat. Both zero-set indicators of every example
+have algebraic degree three. The list is a collection of examples; it is
+not an enumeration of equivalence classes.
+
+Any of these functions, multiplied by bent sign functions on additional
+even numbers of variables, gives non-splitting level-one functions with
+support density 3/4 and cubic zero-set indicators.
 
 ## Mathematical conventions
 

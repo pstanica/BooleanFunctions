@@ -6,7 +6,8 @@ Exact, floating-point-free verification for the paper
 Default run verifies all finite computations used in the paper:
   (1) every level-one Z-bent function in dimensions 2 and 4 is splitting;
   (2) the six-variable non-splitting seed and its Walsh-minor argument;
-  (3) the cylinder-rank check in dimension 8.
+  (3) the cylinder-rank check in dimension 8;
+  (4) the 24 sixteen-zero examples and their zero-set geometry.
 
 Run:
     python3 NonSplitting_verify_certificate.py
@@ -14,12 +15,14 @@ Run:
 Options:
     --minimal-only   verify only the dimensions 2 and 4 classification
     --seed-only      verify only the six-variable seed and cylinder rank
+    --examples-only  verify only the 24 sixteen-zero examples
 
 Requires: numpy, sympy.  All mathematical tests use exact integer arithmetic;
 no floating-point rank test and no integer-programming solver is used.
 """
 
-import sys
+import argparse
+import verify_C16
 import numpy as np
 from sympy import Matrix, Integer
 
@@ -182,14 +185,22 @@ def seed_and_rigidity_check():
 
 
 def main():
-    minimal_only = "--minimal-only" in sys.argv
-    seed_only = "--seed-only" in sys.argv
-    if minimal_only and seed_only:
-        raise SystemExit("Choose at most one of --minimal-only and --seed-only.")
-    if not seed_only:
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--minimal-only', action='store_true')
+    group.add_argument('--seed-only', action='store_true')
+    group.add_argument('--examples-only', action='store_true')
+    args = parser.parse_args()
+    if args.minimal_only:
         minimal_dimension_check()
-    if not minimal_only:
+    elif args.seed_only:
         seed_and_rigidity_check()
+    elif args.examples_only:
+        verify_C16.main()
+    else:
+        minimal_dimension_check()
+        seed_and_rigidity_check()
+        verify_C16.main()
 
 
 if __name__ == "__main__":
