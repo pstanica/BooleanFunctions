@@ -1,0 +1,24 @@
+Seed transform, zero sets, and determinant verified: 1073741824
+Cylinder minor rank 72 verified; |det| = 2^192
+Four-variable counterexample: disjoint semibent spectra and explicit bent split verified.
+Bundled arrays: seed and products in dimensions 8, 10, and 12 agree exactly.
+Complete spread: all 8953 admissible coefficient vectors have an explicit bent split.
+Six-variable seed: all 262144 complementary sign vectors checked; no splitting partner.
+All requested checks passed.
+
+n=2 ternary=81 level_one=33 bent=8 averages=33
+0:1 2:24 4:8 
+n=4 ternary=43046721 level_one=213249 bent=896 averages=213249
+0:1 4:1120 6:14336 8:84000 10:86016 12:26880 16:896 
+
+[n=2] BF_1 has 33 functions; 8 bent sign vectors; all level-one functions split : OK
+      support-size distribution: {0: 1, 2: 24, 4: 8}
+[n=4] BF_1 has 213249 functions; 896 bent sign vectors; all level-one functions split : OK
+      support-size distribution: {0: 1, 4: 1120, 6: 14336, 8: 84000, 10: 86016, 12: 26880, 16: 896}
+--> dimension 6 is the minimum possible dimension for non-splitting at level 1.
+[seed 1] f and hat(f) are {-1,0,1}-valued -> f in BF_1^3 : OK
+[seed 2] zero sets C,D match the paper (|C|=|D|=18) : OK
+[seed 3] R subset D^c, det W_{R,C}=2^30 (exact integer) : OK
+[seed 4] support rigidity on F_2^6 (rank 18) : OK
+[seed 5] cylinder rigidity at n=8 (rank 72 = full) : OK
+--> the seed yields non-splitting level-one Z-bent functions in every even n>=6.
