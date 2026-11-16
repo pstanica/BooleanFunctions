@@ -1,0 +1,28 @@
+== verify_seed_and_lift.py ==
+V1 isotropic pair: 0111100000 0000011110
+matching lift: rotation symmetric; bent = True
+K4 lift: rotation symmetric; bent = True
+4-cycle lift: rotation symmetric; bent = False
+All seed and lift checks passed.
+== enumerate_isotropic_subspaces.py ==
+Isotropic subspaces by dimension 0 through 5: [1, 1023, 5131, 2955, 225, 0]
+Number of four-dimensional isotropic subspaces with K(U) = U: 225
+== enumerate_circulant_graphs.py ==
+Connected nonsingular circulant graphs up to isomorphism (k = 1 through 7): (1, 1, 1, 4, 6, 9, 19)
+== verify_su8.py ==
+Walsh coefficients of absolute value 16: 256
+Unordered pairs of distinct nonzero directions: 32385
+Pairs with a constant second difference: 0
+== enumerate_quartic_replacements.cpp ==
+Seed pair: both bent; half-turn basis verified for f; no constant second difference for independent directions of g.
+Normalized quartic rotation symmetric bent functions: 3712
+Inside M#: 768
+Outside M#: 2944
+Half-turn M-subspace verified: 768
+Edges inside/inside: 0
+Edges inside/outside: 704
+Edges outside/outside: 992
+Inside vertices on crossing edges: 336
+Outside vertices on crossing edges: 448
+Admissible unordered pairs of quartic orbits: 38
+Directed orbit replacements realized on crossing edges: 20
